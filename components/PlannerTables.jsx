@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import Modal from "./Modal";
-import { ListTodo } from "lucide-react";
+import { ChevronLeft, ChevronRight, ListTodo } from "lucide-react";
 
 const plannerData = [
   {
@@ -14,7 +14,7 @@ const plannerData = [
     created: "2024-11-01",
     assignee: "Amit",
     details:
-      "You will see details of task over here. There are lot of things we need to take care of. We need to focus on accessibility too",
+      "You will see details of the task over here. There are a lot of things we need to take care of. We need to focus on accessibility too.",
   },
   {
     id: 2,
@@ -25,6 +25,8 @@ const plannerData = [
     dueDate: "2024-12-05",
     created: "2024-10-10",
     assignee: "Priya",
+    details:
+      "This bug affects the layout on mobile devices. Ensure alignment fixes are compatible across screen sizes.",
   },
   {
     id: 3,
@@ -35,6 +37,8 @@ const plannerData = [
     dueDate: "2024-11-15",
     created: "2024-09-20",
     assignee: "Ravi",
+    details:
+      "Detail each API endpoint and expected responses. Use examples for clarity and ensure it covers edge cases.",
   },
   {
     id: 4,
@@ -45,6 +49,8 @@ const plannerData = [
     dueDate: "2024-12-12",
     created: "2024-08-25",
     assignee: "Amit",
+    details:
+      "Integrate Stripe as the payment gateway. Ensure proper error handling and support for multiple currencies.",
   },
   {
     id: 5,
@@ -55,6 +61,8 @@ const plannerData = [
     dueDate: "2024-12-10",
     created: "2024-07-30",
     assignee: "Priya",
+    details:
+      "Update README to reflect recent changes. Include installation instructions and major feature descriptions.",
   },
   {
     id: 6,
@@ -65,6 +73,8 @@ const plannerData = [
     dueDate: "2024-11-25",
     created: "2024-06-22",
     assignee: "Ravi",
+    details:
+      "Design the user dashboard with responsiveness in mind. Include analytics and user activity overview sections.",
   },
   {
     id: 7,
@@ -75,6 +85,8 @@ const plannerData = [
     dueDate: "2024-12-15",
     created: "2024-08-05",
     assignee: "Ankit",
+    details:
+      "Implement CI/CD pipeline with GitHub Actions. Ensure automated tests run and deployments to staging are smooth.",
   },
   {
     id: 8,
@@ -85,6 +97,8 @@ const plannerData = [
     dueDate: "2024-11-18",
     created: "2024-09-10",
     assignee: "Priya",
+    details:
+      "Refactor homepage for better performance. Focus on reducing render times and optimizing image loading.",
   },
   {
     id: 9,
@@ -95,6 +109,8 @@ const plannerData = [
     dueDate: "2024-12-20",
     created: "2024-10-01",
     assignee: "Ravi",
+    details:
+      "Implement secure user authentication with password encryption. Allow login via email and social accounts.",
   },
   {
     id: 10,
@@ -105,6 +121,8 @@ const plannerData = [
     dueDate: "2024-12-25",
     created: "2024-07-15",
     assignee: "Amit",
+    details:
+      "Fix issues with layout shifting on smaller screens. Verify that padding and margins are responsive.",
   },
   {
     id: 11,
@@ -115,6 +133,8 @@ const plannerData = [
     dueDate: "2024-11-30",
     created: "2024-09-05",
     assignee: "Priya",
+    details:
+      "Implement search with filters by date and priority. Optimize for fast performance on large data sets.",
   },
   {
     id: 12,
@@ -125,6 +145,8 @@ const plannerData = [
     dueDate: "2024-11-10",
     created: "2024-08-20",
     assignee: "Ankit",
+    details:
+      "Update all project dependencies to their latest versions. Test compatibility and resolve breaking changes.",
   },
   {
     id: 13,
@@ -135,6 +157,8 @@ const plannerData = [
     dueDate: "2024-12-05",
     created: "2024-10-12",
     assignee: "Ravi",
+    details:
+      "Build a file upload feature supporting various formats. Ensure large files are uploaded with error handling.",
   },
   {
     id: 14,
@@ -145,6 +169,8 @@ const plannerData = [
     dueDate: "2024-12-10",
     created: "2024-09-30",
     assignee: "Amit",
+    details:
+      "Resolve connection issues with the database. Check for connection pooling and optimize connection limits.",
   },
   {
     id: 15,
@@ -155,6 +181,8 @@ const plannerData = [
     dueDate: "2024-11-28",
     created: "2024-06-10",
     assignee: "Priya",
+    details:
+      "Optimize CSS to improve mobile performance. Minify CSS files and reduce unused styles for faster load times.",
   },
 ];
 
@@ -162,6 +190,7 @@ export function OpenTaskTable() {
   const rowRef = useRef([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskIndexModal, setTaskIndexModal] = useState();
   const itemsPerPage = 3;
 
   const indexOfLastItemOnPage = currentPage * itemsPerPage;
@@ -204,15 +233,49 @@ export function OpenTaskTable() {
     if (e.key === "ArrowUp" && i > 0) {
       rowRef?.current[i - 1]?.focus();
     }
+
+    if (e.key === "Enter") {
+      setIsModalOpen(true);
+      setTaskIndexModal(i);
+    }
+
+    if (e.key === "Escape") {
+      setIsModalOpen(false);
+    }
+
+    // handle modal traversing with key down
+    if (e.key === "ArrowRight") {
+      if (openPlannerData.length <= taskIndexModal + 1) return;
+      setTaskIndexModal((taskIndex) => taskIndex + 1);
+    }
+
+    if (e.key === "ArrowLeft") {
+      if (taskIndexModal === 0) return;
+      setTaskIndexModal((i) => i - 1);
+    }
   }
 
-  // handle Modal toggle
+  // handle task modal toggle
   function handleModalClose() {
     setIsModalOpen(false);
   }
 
-  function handleModalOpen() {
+  function handleModalOpen(taskIndex) {
     setIsModalOpen(true);
+    setTaskIndexModal(taskIndex);
+  }
+
+  // Handle task modal traversing
+  function handleModalTaskLeft() {
+    if (taskIndexModal === 0) return;
+    setTaskIndexModal((i) => {
+      i - 1;
+    });
+  }
+
+  function handleModalTaskRight() {
+    if (openPlannerData.length <= taskIndexModal + 1) return;
+    setTaskIndexModal((taskIndex) => taskIndex + 1);
   }
 
   return (
@@ -249,7 +312,7 @@ export function OpenTaskTable() {
                 key={row.id}
                 ref={(el) => (rowRef.current[i] = el)}
                 onKeyDown={(e) => handleKeyDown(e, i)}
-                onClick={handleModalOpen}
+                onClick={() => handleModalOpen(i)}
                 tabIndex="0"
                 className="focus:outline-none focus:bg-gray-100 text-center border-b py-2"
               >
@@ -305,18 +368,42 @@ export function OpenTaskTable() {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-        <h2 className="ml-6 text-xl font-semibold mb-8">
-          Your {currentData.find((row, i) => row.id === 1).status} task
+        <h2 className="ml-4 text-xl font-semibold mb-8">
+          Your{" "}
+          {
+            plannerData
+              .filter((row, i) => row.status === "open")
+              .find((row, i) => i === taskIndexModal)?.status
+          }{" "}
+          task
         </h2>
-        <div className="px-6">
-          <h3 className="text-md font-medium mb-6 flex items-center">
-            <ListTodo className="w-5 mr-2" />
-            {currentData.find((row, i) => row.id === 1).name}
+        <div className="px-4">
+          <h3 className="text-md font-medium mb-4 flex items-center">
+            <ListTodo className="w-5 mr-3" />
+            {
+              plannerData
+                .filter((row, i) => row.status === "open")
+                .find((row, i) => i === taskIndexModal)?.name
+            }
           </h3>
 
           <p className="ml-2 mb-2 text-sm text-neutral-500">Details:</p>
-          <div className="w-full border border-neutral-100 rounded-lg h-full py-4 px-4 text-sm text-neutral-700">
-            {currentData.find((row, i) => row.id === 1).details}
+          <div className="w-full border border-neutral-100 rounded-lg  py-4 px-4 text-sm text-neutral-700">
+            {
+              plannerData
+                .filter((row, i) => row.status === "open")
+                .find((row, i) => i === taskIndexModal)?.details
+            }
+          </div>
+          <div>
+            <ChevronLeft
+              className="absolute top-[50%] left-2 "
+              onClick={(i) => handleModalTaskLeft(i)}
+            />
+            <ChevronRight
+              className="absolute top-[50%] right-2 "
+              onClick={(i) => handleModalTaskRight(i)}
+            />
           </div>
         </div>
       </Modal>
