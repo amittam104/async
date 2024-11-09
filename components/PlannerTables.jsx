@@ -354,6 +354,17 @@ export function OpenTaskTable() {
       if (taskIndexModal === 0) return;
       setTaskIndexModal((i) => i - 1);
     }
+
+    if (e.key === "1") {
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("open");
+    } else if (e.key === "2") {
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("inProgress");
+    } else if (e.key === "3") {
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("closed");
+    }
   }
 
   // handle task modal toggle
@@ -407,6 +418,23 @@ export function OpenTaskTable() {
     // );
   }
 
+  // Handle key down events in status change dropdown menu in modal
+  function handleStatusChangeKeyDown(e) {
+    console.log("Key Press");
+    if (e.key === 97) {
+      // setSelectedOption("open");
+      console.log("hello");
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("open");
+    } else if (e.key === 98) {
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("inProgress");
+    } else if (e.key === 99) {
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("closed");
+    }
+  }
+
   return (
     <>
       <table className="w-full">
@@ -442,7 +470,7 @@ export function OpenTaskTable() {
                 ref={(el) => (rowRef.current[i] = el)}
                 onKeyDown={(e) => handleKeyDown(e, i)}
                 onClick={() => handleModalOpen(i)}
-                tabIndex="0"
+                tabIndex={0}
                 className="focus:outline-none focus:bg-gray-100 text-center border-b py-2"
               >
                 {/* <td className="text-left text-sm border-b py-2">{row.id}</td> */}
@@ -776,7 +804,7 @@ export function ProgressTaskTable() {
                   ref={(el) => (rowRef.current[i] = el)}
                   onKeyDown={(e) => handleKeyDown(e, i)}
                   onClick={() => handleModalOpen(i)}
-                  tabIndex="0"
+                  tabIndex={0}
                   className="focus:outline-none focus:bg-gray-100 text-center border-b py-2"
                 >
                   {/* <td className="text-left text-sm border-b py-2">{row.id}</td> */}
@@ -1081,7 +1109,7 @@ export function ClosedTaskTable() {
                   ref={(el) => (rowRef.current[i] = el)}
                   onKeyDown={(e) => handleKeyDown(e, i)}
                   onClick={() => handleModalOpen(i)}
-                  tabIndex="0"
+                  tabIndex={0}
                   className="focus:outline-none focus:bg-gray-100 text-center border-b py-2"
                 >
                   {/* <td className="text-left text-sm border-b py-2">{row.id}</td> */}
