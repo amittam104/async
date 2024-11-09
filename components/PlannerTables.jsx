@@ -9,8 +9,17 @@ import {
   Send,
   User,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { Badge } from "./ui/badge";
 import { Input } from "./ui/input";
+import ConfirmationModal from "./ConfirmationModal";
 
 const initialPlannerData = [
   {
@@ -277,6 +286,12 @@ export function OpenTaskTable() {
   const [taskIndexModal, setTaskIndexModal] = useState();
   const [plannerData, setPlannerData] = useState(initialPlannerData);
   const [userComment, setUserComment] = useState("");
+  const [currentOpenModalStatus, setCurrentOpenModalStatus] = useState("open");
+  const [taskStatusUpdateConfirmation, setTaskStatusUpdateConfirmation] =
+    useState(false);
+  const [confirmedTaskStatusChange, setConfirmedTaskStatusChange] = useState(
+    currentOpenModalStatus
+  );
   const itemsPerPage = 3;
 
   const indexOfLastItemOnPage = currentPage * itemsPerPage;
@@ -378,6 +393,20 @@ export function OpenTaskTable() {
     setUserComment("");
   }
 
+  // Handle status change of the task opened in modal
+  function handleTaskStatusChange(value) {
+    setTaskStatusUpdateConfirmation(true);
+    setCurrentOpenModalStatus(value);
+
+    // initialPlannerData
+    //   .filter((row, i) => row.status === "open")
+    //   .find((row, i) => i === taskIndexModal).status = value;
+    // setIs(false);
+    // setTaskIndexModal(
+    //   initialPlannerData.indexOf((row, i) => row.status === value)
+    // );
+  }
+
   return (
     <>
       <table className="w-full">
@@ -418,7 +447,7 @@ export function OpenTaskTable() {
               >
                 {/* <td className="text-left text-sm border-b py-2">{row.id}</td> */}
                 <td className="text-left text-sm border-b py-2">
-                  <Badge className="bg-neutral-100 border border-neutral-600 text-neutral-600">
+                  <Badge className="bg-neutral-100 border border-neutral-600 text-neutral-600 hover:bg-neutral-200/80">
                     {row.priority}
                   </Badge>
                 </td>
@@ -481,16 +510,54 @@ export function OpenTaskTable() {
             task
           </h2>
           <div className="px-4  pb-8 border-b border-b-neutral-200">
-            <h3 className="text-md font-medium mb-2 flex items-center">
-              <ListTodo className="w-5 mr-3" />
-              {
-                plannerData
-                  .filter((row, i) => row.status === "open")
-                  .find((row, i) => i === taskIndexModal)?.name
-              }
-            </h3>
-
-            <Badge className="mb-6 bg-neutral-100 border border-neutral-600 text-neutral-600">
+            <div className="flex items-center justify-between">
+              <h3 className="text-md font-medium mb-2 flex items-center">
+                <ListTodo className="w-5 mr-3" />
+                {
+                  plannerData
+                    .filter((row, i) => row.status === "open")
+                    .find((row, i) => i === taskIndexModal)?.name
+                }
+              </h3>
+              <Select
+                defaultValue="open"
+                value={confirmedTaskStatusChange}
+                onValueChange={(value) => handleTaskStatusChange(value)}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="open">Open</SelectItem>
+                  <SelectItem value="inProgress">In Progress</SelectItem>
+                  <SelectItem value="closed">Closed</SelectItem>
+                </SelectContent>
+              </Select>
+              <ConfirmationModal isOpen={taskStatusUpdateConfirmation}>
+                <h4 className="text-md font-semibold mb-2">Are you sure?</h4>
+                <p className="text-sm mb-6">
+                  Are you sure you want to update the status of this task?
+                </p>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setTaskStatusUpdateConfirmation(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setConfirmedTaskStatusChange(currentOpenModalStatus);
+                      setCurrentOpenModalStatus(currentOpenModalStatus);
+                      setTaskStatusUpdateConfirmation(false);
+                    }}
+                  >
+                    Continue
+                  </Button>
+                </div>
+              </ConfirmationModal>
+            </div>
+            <Badge className="mb-6 bg-neutral-100 border border-neutral-600 text-neutral-600 hover:bg-neutral-200/80">
               Priority -{" "}
               {
                 plannerData
@@ -779,14 +846,26 @@ export function ProgressTaskTable() {
             task
           </h2>
           <div className="px-4  pb-8 border-b border-b-neutral-200">
-            <h3 className="text-md font-medium mb-2 flex items-center">
-              <ListTodo className="w-5 mr-3" />
-              {
-                plannerData
-                  .filter((row, i) => row.status === "inProgress")
-                  .find((row, i) => i === taskIndexModal)?.name
-              }
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-md font-medium mb-2 flex items-center">
+                <ListTodo className="w-5 mr-3" />
+                {
+                  plannerData
+                    .filter((row, i) => row.status === "inProgress")
+                    .find((row, i) => i === taskIndexModal)?.name
+                }
+              </h3>
+              <Select defaultValue="inProgress">
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="open">Open</SelectItem>
+                  <SelectItem value="inProgress">In Progress</SelectItem>
+                  <SelectItem value="closed">Closed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
             <Badge className="mb-6 bg-neutral-100 border border-neutral-600 text-neutral-600">
               Priority -{" "}
@@ -1072,14 +1151,26 @@ export function ClosedTaskTable() {
             task
           </h2>
           <div className="px-4  pb-8 border-b border-b-neutral-200">
-            <h3 className="text-md font-medium mb-2 flex items-center">
-              <ListTodo className="w-5 mr-3" />
-              {
-                plannerData
-                  .filter((row, i) => row.status === "closed")
-                  .find((row, i) => i === taskIndexModal)?.name
-              }
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-md font-medium mb-2 flex items-center">
+                <ListTodo className="w-5 mr-3" />
+                {
+                  plannerData
+                    .filter((row, i) => row.status === "closed")
+                    .find((row, i) => i === taskIndexModal)?.name
+                }
+              </h3>
+              <Select defaultValue="closed">
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="open">Open</SelectItem>
+                  <SelectItem value="inProgress">In Progress</SelectItem>
+                  <SelectItem value="closed">Closed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
             <Badge className="mb-6 bg-neutral-100 border border-neutral-600 text-neutral-600">
               Priority -{" "}
