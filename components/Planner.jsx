@@ -34,7 +34,6 @@ function Planner() {
           </TabsContent>
         </Tabs>
       </div>
-      <div></div>
     </div>
   );
 }
