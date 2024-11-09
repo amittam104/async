@@ -30,10 +30,7 @@ export function OpenTaskTable({ plannerData, setPlannerData }) {
   const [currentOpenModalStatus, setCurrentOpenModalStatus] = useState("open");
   const [taskStatusUpdateConfirmation, setTaskStatusUpdateConfirmation] =
     useState(false);
-  const [confirmedTaskStatusChange, setConfirmedTaskStatusChange] = useState(
-    currentOpenModalStatus
-  );
-  const itemsPerPage = 3;
+  const itemsPerPage = 10;
   const [currentTaskId, setCurrentTaskId] = useState(null);
 
   const indexOfLastItemOnPage = currentPage * itemsPerPage;
@@ -152,8 +149,8 @@ export function OpenTaskTable({ plannerData, setPlannerData }) {
 
   // Handle status change of the task opened in modal
   function handleTaskStatusChange(value) {
-    setTaskStatusUpdateConfirmation(true);
     setCurrentOpenModalStatus(value);
+    setTaskStatusUpdateConfirmation(true);
   }
 
   function handleConfirmedStatusChange() {
@@ -167,10 +164,19 @@ export function OpenTaskTable({ plannerData, setPlannerData }) {
       return task;
     });
 
-    setPlannerData(updatedPlannerData);
-    setConfirmedTaskStatusChange(currentOpenModalStatus);
+    setPlannerData((plannerData) => (plannerData = updatedPlannerData));
     setTaskStatusUpdateConfirmation(false);
     setCurrentOpenModalStatus("open");
+    if (
+      plannerData.filter((task) => {
+        if (task.status === "open") return task;
+      }).length === 1
+    )
+      setIsModalOpen(false);
+
+    setCurrentTaskId(
+      updatedPlannerData.filter((row) => row.status === "open")?.[0]?.id
+    );
   }
 
   return (
@@ -401,10 +407,7 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
     useState("inProgress");
   const [taskStatusUpdateConfirmation, setTaskStatusUpdateConfirmation] =
     useState(false);
-  const [confirmedTaskStatusChange, setConfirmedTaskStatusChange] = useState(
-    currentOpenModalStatus
-  );
-  const itemsPerPage = 3;
+  const itemsPerPage = 10;
   const [currentTaskId, setCurrentTaskId] = useState(null);
 
   const indexOfLastItemOnPage = currentPage * itemsPerPage;
@@ -526,8 +529,8 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
   }
 
   function handleTaskStatusChange(value) {
-    setTaskStatusUpdateConfirmation(true);
     setCurrentOpenModalStatus(value);
+    setTaskStatusUpdateConfirmation(true);
   }
 
   function handleConfirmedStatusChange() {
@@ -541,10 +544,19 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
       return task;
     });
 
-    setPlannerData(updatedPlannerData);
-    setConfirmedTaskStatusChange(currentOpenModalStatus);
+    setPlannerData((plannerData) => (plannerData = updatedPlannerData));
     setTaskStatusUpdateConfirmation(false);
     setCurrentOpenModalStatus("inProgress");
+    if (
+      plannerData.filter((task) => {
+        if (task.status === "inProgress") return task;
+      }).length === 1
+    )
+      setIsModalOpen(false);
+
+    setCurrentTaskId(
+      updatedPlannerData.filter((row) => row.status === "inProgress")?.[0]?.id
+    );
   }
 
   return (
@@ -752,7 +764,12 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
                 id="comment"
                 onChange={(e) => setUserComment(e.target.value)}
               />
-              <Button onSubmit size="icon" variant="ghost" className=" text-sm">
+              <Button
+                type="submit"
+                size="icon"
+                variant="ghost"
+                className=" text-sm"
+              >
                 <Send />
               </Button>
             </form>
@@ -773,10 +790,7 @@ export function ClosedTaskTable({ plannerData, setPlannerData }) {
     useState("closed");
   const [taskStatusUpdateConfirmation, setTaskStatusUpdateConfirmation] =
     useState(false);
-  const [confirmedTaskStatusChange, setConfirmedTaskStatusChange] = useState(
-    currentOpenModalStatus
-  );
-  const itemsPerPage = 3;
+  const itemsPerPage = 10;
   const [currentTaskId, setCurrentTaskId] = useState(null);
 
   const indexOfLastItemOnPage = currentPage * itemsPerPage;
@@ -896,8 +910,8 @@ export function ClosedTaskTable({ plannerData, setPlannerData }) {
   }
 
   function handleTaskStatusChange(value) {
-    setTaskStatusUpdateConfirmation(true);
     setCurrentOpenModalStatus(value);
+    setTaskStatusUpdateConfirmation(true);
   }
 
   function handleConfirmedStatusChange() {
@@ -911,10 +925,19 @@ export function ClosedTaskTable({ plannerData, setPlannerData }) {
       return task;
     });
 
-    setPlannerData(updatedPlannerData);
-    setConfirmedTaskStatusChange(currentOpenModalStatus);
+    setPlannerData((plannerData) => (plannerData = updatedPlannerData));
     setTaskStatusUpdateConfirmation(false);
     setCurrentOpenModalStatus("closed");
+    if (
+      plannerData.filter((task) => {
+        if (task.status === "closed") return task;
+      }).length === 1
+    )
+      setIsModalOpen(false);
+
+    setCurrentTaskId(
+      updatedPlannerData.filter((row) => row.status === "closed")?.[0]?.id
+    );
   }
 
   return (
@@ -1122,7 +1145,12 @@ export function ClosedTaskTable({ plannerData, setPlannerData }) {
                 id="comment"
                 onChange={(e) => setUserComment(e.target.value)}
               />
-              <Button onSubmit size="icon" variant="ghost" className=" text-sm">
+              <Button
+                type="submit"
+                size="icon"
+                variant="ghost"
+                className=" text-sm"
+              >
                 <Send />
               </Button>
             </form>
