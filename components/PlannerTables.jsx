@@ -21,270 +21,11 @@ import { Badge } from "./ui/badge";
 import { Input } from "./ui/input";
 import ConfirmationModal from "./ConfirmationModal";
 
-const initialPlannerData = [
-  {
-    id: 0,
-    priority: "High",
-    status: "open",
-    name: "Develop login page",
-    labels: "feature",
-    dueDate: "2024-12-01",
-    created: "2024-11-01",
-    assignee: "Amit",
-    details:
-      "You will see details of the task over here. There are a lot of things we need to take care of. We need to focus on accessibility too.",
-    comments: [
-      "Will have to start working on it from this week.",
-      "There are few changes, we need to focus on this first.",
-      "Working on the changes, will notify you tomorrow",
-    ],
-  },
-  {
-    id: 1,
-    priority: "Medium",
-    status: "inProgress",
-    name: "Fix button alignment bug",
-    labels: "bug",
-    dueDate: "2024-12-05",
-    created: "2024-10-10",
-    assignee: "Priya",
-    details:
-      "This bug affects the layout on mobile devices. Ensure alignment fixes are compatible across screen sizes.",
-    comments: [
-      "Found the root cause of the alignment issue.",
-      "Testing on different devices to confirm it's fixed.",
-      "Almost done; need a few tweaks for better spacing.",
-    ],
-  },
-  {
-    id: 2,
-    priority: "Low",
-    status: "open",
-    name: "Write API documentation",
-    labels: "feature",
-    dueDate: "2024-11-15",
-    created: "2024-09-20",
-    assignee: "Ravi",
-    details:
-      "Detail each API endpoint and expected responses. Use examples for clarity and ensure it covers edge cases.",
-    comments: [
-      "Started drafting the endpoint descriptions.",
-      "Added examples for the first few endpoints.",
-      "Reviewing edge cases to include in the documentation.",
-    ],
-  },
-  {
-    id: 3,
-    priority: "High",
-    status: "closed",
-    name: "Integrate payment gateway",
-    labels: "feature",
-    dueDate: "2024-12-12",
-    created: "2024-08-25",
-    assignee: "Amit",
-    details:
-      "Integrate Stripe as the payment gateway. Ensure proper error handling and support for multiple currencies.",
-    comments: [
-      "Stripe integration is mostly complete.",
-      "Testing for multiple currency support.",
-      "Added error handling for payment failures.",
-    ],
-  },
-  {
-    id: 4,
-    priority: "Low",
-    status: "open",
-    name: "Update README file",
-    labels: "documentation",
-    dueDate: "2024-12-10",
-    created: "2024-07-30",
-    assignee: "Priya",
-    details:
-      "Update README to reflect recent changes. Include installation instructions and major feature descriptions.",
-    comments: [
-      "Added initial setup instructions.",
-      "Updated feature list in the README.",
-      "Clarifying installation steps based on feedback.",
-    ],
-  },
-  {
-    id: 5,
-    priority: "High",
-    status: "open",
-    name: "Design dashboard UI",
-    labels: "feature",
-    dueDate: "2024-11-25",
-    created: "2024-06-22",
-    assignee: "Ravi",
-    details:
-      "Design the user dashboard with responsiveness in mind. Include analytics and user activity overview sections.",
-    comments: [
-      "Started with wireframes for the dashboard.",
-      "Focusing on responsiveness for various screen sizes.",
-      "Incorporated analytics section as planned.",
-    ],
-  },
-  {
-    id: 6,
-    priority: "Medium",
-    status: "closed",
-    name: "Set up CI/CD pipeline",
-    labels: "infrastructure",
-    dueDate: "2024-12-15",
-    created: "2024-08-05",
-    assignee: "Ankit",
-    details:
-      "Implement CI/CD pipeline with GitHub Actions. Ensure automated tests run and deployments to staging are smooth.",
-    comments: [
-      "Configured GitHub Actions for automated tests.",
-      "Deployment to staging environment is working.",
-      "Debugging minor issues with test automation.",
-    ],
-  },
-  {
-    id: 7,
-    priority: "Low",
-    status: "inProgress",
-    name: "Refactor homepage code",
-    labels: "feature",
-    dueDate: "2024-11-18",
-    created: "2024-09-10",
-    assignee: "Priya",
-    details:
-      "Refactor homepage for better performance. Focus on reducing render times and optimizing image loading.",
-    comments: [
-      "Identified parts of the code for optimization.",
-      "Working on reducing the render times.",
-      "Optimizing image loading strategy for faster load times.",
-    ],
-  },
-  {
-    id: 8,
-    priority: "High",
-    status: "open",
-    name: "Build user authentication",
-    labels: "feature",
-    dueDate: "2024-12-20",
-    created: "2024-10-01",
-    assignee: "Ravi",
-    details:
-      "Implement secure user authentication with password encryption. Allow login via email and social accounts.",
-    comments: [
-      "Implemented password encryption for secure login.",
-      "Testing social account login integration.",
-      "Added basic login and signup forms for testing.",
-    ],
-  },
-  {
-    id: 9,
-    priority: "Medium",
-    status: "closed",
-    name: "Fix mobile layout issue",
-    labels: "bug",
-    dueDate: "2024-12-25",
-    created: "2024-07-15",
-    assignee: "Amit",
-    details:
-      "Fix issues with layout shifting on smaller screens. Verify that padding and margins are responsive.",
-    comments: [
-      "Adjusted margins to fix shifting issues.",
-      "Tested responsiveness on various screen sizes.",
-      "Finalized adjustments; layout now stable on mobile.",
-    ],
-  },
-  {
-    id: 10,
-    priority: "High",
-    status: "closed",
-    name: "Implement search functionality",
-    labels: "feature",
-    dueDate: "2024-11-30",
-    created: "2024-09-05",
-    assignee: "Priya",
-    details:
-      "Implement search with filters by date and priority. Optimize for fast performance on large data sets.",
-    comments: [
-      "Set up basic search functionality.",
-      "Added filters for date and priority.",
-      "Working on optimizing for large data sets.",
-    ],
-  },
-  {
-    id: 11,
-    priority: "High",
-    status: "inProgress",
-    name: "Update project dependencies",
-    labels: "maintenance",
-    dueDate: "2024-11-10",
-    created: "2024-08-20",
-    assignee: "Ankit",
-    details:
-      "Update all project dependencies to their latest versions. Test compatibility and resolve breaking changes.",
-    comments: [
-      "Started with core dependency updates.",
-      "Testing for compatibility issues after updates.",
-      "Resolved major breaking changes in dependencies.",
-    ],
-  },
-  {
-    id: 12,
-    priority: "High",
-    status: "inProgress",
-    name: "Implement file upload feature",
-    labels: "feature",
-    dueDate: "2024-12-05",
-    created: "2024-10-12",
-    assignee: "Ravi",
-    details:
-      "Build a file upload feature supporting various formats. Ensure large files are uploaded with error handling.",
-    comments: [
-      "Basic file upload functionality is in place.",
-      "Testing support for different file formats.",
-      "Handling errors for large file uploads.",
-    ],
-  },
-  {
-    id: 13,
-    priority: "Medium",
-    status: "open",
-    name: "Fix database connection issue",
-    labels: "bug",
-    dueDate: "2024-12-10",
-    created: "2024-09-30",
-    assignee: "Amit",
-    details:
-      "Resolve connection issues with the database. Check for connection pooling and optimize connection limits.",
-    comments: [
-      "Investigating connection pooling settings.",
-      "Adjusted connection limits for better stability.",
-      "Monitoring database for connection improvements.",
-    ],
-  },
-  {
-    id: 14,
-    priority: "Low",
-    status: "closed",
-    name: "Optimize CSS for mobile",
-    labels: "performance",
-    dueDate: "2024-11-28",
-    created: "2024-06-10",
-    assignee: "Priya",
-    details:
-      "Optimize CSS to improve mobile performance. Minify CSS files and reduce unused styles for faster load times.",
-    comments: [
-      "Started removing unused styles.",
-      "Minified CSS files to reduce load times.",
-      "Testing CSS performance on mobile devices.",
-    ],
-  },
-];
-
-export function OpenTaskTable() {
+export function OpenTaskTable({ plannerData, setPlannerData }) {
   const rowRef = useRef([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskIndexModal, setTaskIndexModal] = useState();
-  const [plannerData, setPlannerData] = useState(initialPlannerData);
   const [userComment, setUserComment] = useState("");
   const [currentOpenModalStatus, setCurrentOpenModalStatus] = useState("open");
   const [taskStatusUpdateConfirmation, setTaskStatusUpdateConfirmation] =
@@ -293,6 +34,7 @@ export function OpenTaskTable() {
     currentOpenModalStatus
   );
   const itemsPerPage = 3;
+  const [currentTaskId, setCurrentTaskId] = useState(null);
 
   const indexOfLastItemOnPage = currentPage * itemsPerPage;
   const indexOfFirstItemOnPage = indexOfLastItemOnPage - itemsPerPage;
@@ -323,6 +65,7 @@ export function OpenTaskTable() {
     return () => {
       document.body.removeEventListener("keydown", handleKeyDown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle table row focus on up or down arrow keys
@@ -373,6 +116,9 @@ export function OpenTaskTable() {
   }
 
   function handleModalOpen(taskIndex) {
+    const openTasks = plannerData.filter((row) => row.status === "open");
+    const selectedTask = openTasks[taskIndex];
+    setCurrentTaskId(selectedTask.id);
     setIsModalOpen(true);
     setTaskIndexModal(taskIndex);
   }
@@ -408,31 +154,23 @@ export function OpenTaskTable() {
   function handleTaskStatusChange(value) {
     setTaskStatusUpdateConfirmation(true);
     setCurrentOpenModalStatus(value);
-
-    // initialPlannerData
-    //   .filter((row, i) => row.status === "open")
-    //   .find((row, i) => i === taskIndexModal).status = value;
-    // setIs(false);
-    // setTaskIndexModal(
-    //   initialPlannerData.indexOf((row, i) => row.status === value)
-    // );
   }
 
-  // Handle key down events in status change dropdown menu in modal
-  function handleStatusChangeKeyDown(e) {
-    console.log("Key Press");
-    if (e.key === 97) {
-      // setSelectedOption("open");
-      console.log("hello");
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("open");
-    } else if (e.key === 98) {
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("inProgress");
-    } else if (e.key === 99) {
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("closed");
-    }
+  function handleConfirmedStatusChange() {
+    const updatedPlannerData = plannerData.map((task) => {
+      if (task.id === currentTaskId) {
+        return {
+          ...task,
+          status: currentOpenModalStatus,
+        };
+      }
+      return task;
+    });
+
+    setPlannerData(updatedPlannerData);
+    setConfirmedTaskStatusChange(currentOpenModalStatus);
+    setTaskStatusUpdateConfirmation(false);
+    setCurrentOpenModalStatus("open");
   }
 
   return (
@@ -541,6 +279,7 @@ export function OpenTaskTable() {
             <div className="flex items-center justify-between">
               <h3 className="text-md font-medium mb-2 flex items-center">
                 <ListTodo className="w-5 mr-3" />
+
                 {
                   plannerData
                     .filter((row, i) => row.status === "open")
@@ -549,7 +288,7 @@ export function OpenTaskTable() {
               </h3>
               <Select
                 defaultValue="open"
-                value={confirmedTaskStatusChange}
+                value={currentOpenModalStatus}
                 onValueChange={(value) => handleTaskStatusChange(value)}
               >
                 <SelectTrigger className="w-[180px]">
@@ -573,13 +312,7 @@ export function OpenTaskTable() {
                   >
                     Cancel
                   </Button>
-                  <Button
-                    onClick={() => {
-                      setConfirmedTaskStatusChange(currentOpenModalStatus);
-                      setCurrentOpenModalStatus(currentOpenModalStatus);
-                      setTaskStatusUpdateConfirmation(false);
-                    }}
-                  >
+                  <Button onClick={() => handleConfirmedStatusChange()}>
                     Continue
                   </Button>
                 </div>
@@ -658,14 +391,21 @@ export function OpenTaskTable() {
   );
 }
 
-export function ProgressTaskTable() {
+export function ProgressTaskTable({ plannerData, setPlannerData }) {
   const rowRef = useRef([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskIndexModal, setTaskIndexModal] = useState();
-  const [plannerData, setPlannerData] = useState(initialPlannerData);
   const [userComment, setUserComment] = useState("");
+  const [currentOpenModalStatus, setCurrentOpenModalStatus] =
+    useState("inProgress");
+  const [taskStatusUpdateConfirmation, setTaskStatusUpdateConfirmation] =
+    useState(false);
+  const [confirmedTaskStatusChange, setConfirmedTaskStatusChange] = useState(
+    currentOpenModalStatus
+  );
   const itemsPerPage = 3;
+  const [currentTaskId, setCurrentTaskId] = useState(null);
 
   const indexOfLastItemOnPage = currentPage * itemsPerPage;
   const indexOfFirstItemOnPage = indexOfLastItemOnPage - itemsPerPage;
@@ -698,6 +438,7 @@ export function ProgressTaskTable() {
     return () => {
       document.body.removeEventListener("keydown", handleKeyDown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle table row focus on up or down arrow keys
@@ -729,6 +470,17 @@ export function ProgressTaskTable() {
       if (taskIndexModal === 0) return;
       setTaskIndexModal((i) => i - 1);
     }
+
+    if (e.key === "1") {
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("open");
+    } else if (e.key === "2") {
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("inProgress");
+    } else if (e.key === "3") {
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("closed");
+    }
   }
 
   // handle task modal toggle
@@ -737,6 +489,11 @@ export function ProgressTaskTable() {
   }
 
   function handleModalOpen(taskIndex) {
+    const inProgressTasks = plannerData.filter(
+      (row) => row.status === "inProgress"
+    );
+    const selectedTask = inProgressTasks[taskIndex];
+    setCurrentTaskId(selectedTask.id);
     setIsModalOpen(true);
     setTaskIndexModal(taskIndex);
   }
@@ -766,6 +523,28 @@ export function ProgressTaskTable() {
     setPlannerData(updatedPlannerData);
 
     setUserComment("");
+  }
+
+  function handleTaskStatusChange(value) {
+    setTaskStatusUpdateConfirmation(true);
+    setCurrentOpenModalStatus(value);
+  }
+
+  function handleConfirmedStatusChange() {
+    const updatedPlannerData = plannerData.map((task) => {
+      if (task.id === currentTaskId) {
+        return {
+          ...task,
+          status: currentOpenModalStatus,
+        };
+      }
+      return task;
+    });
+
+    setPlannerData(updatedPlannerData);
+    setConfirmedTaskStatusChange(currentOpenModalStatus);
+    setTaskStatusUpdateConfirmation(false);
+    setCurrentOpenModalStatus("inProgress");
   }
 
   return (
@@ -883,7 +662,11 @@ export function ProgressTaskTable() {
                     .find((row, i) => i === taskIndexModal)?.name
                 }
               </h3>
-              <Select defaultValue="inProgress">
+              <Select
+                defaultValue="inProgress"
+                value={currentOpenModalStatus}
+                onValueChange={(value) => handleTaskStatusChange(value)}
+              >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="" />
                 </SelectTrigger>
@@ -893,6 +676,23 @@ export function ProgressTaskTable() {
                   <SelectItem value="closed">Closed</SelectItem>
                 </SelectContent>
               </Select>
+              <ConfirmationModal isOpen={taskStatusUpdateConfirmation}>
+                <h4 className="text-md font-semibold mb-2">Are you sure?</h4>
+                <p className="text-sm mb-6">
+                  Are you sure you want to update the status of this task?
+                </p>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setTaskStatusUpdateConfirmation(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={() => handleConfirmedStatusChange()}>
+                    Continue
+                  </Button>
+                </div>
+              </ConfirmationModal>
             </div>
 
             <Badge className="mb-6 bg-neutral-100 border border-neutral-600 text-neutral-600">
@@ -963,14 +763,21 @@ export function ProgressTaskTable() {
   );
 }
 
-export function ClosedTaskTable() {
+export function ClosedTaskTable({ plannerData, setPlannerData }) {
   const rowRef = useRef([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskIndexModal, setTaskIndexModal] = useState();
-  const [plannerData, setPlannerData] = useState(initialPlannerData);
   const [userComment, setUserComment] = useState("");
+  const [currentOpenModalStatus, setCurrentOpenModalStatus] =
+    useState("closed");
+  const [taskStatusUpdateConfirmation, setTaskStatusUpdateConfirmation] =
+    useState(false);
+  const [confirmedTaskStatusChange, setConfirmedTaskStatusChange] = useState(
+    currentOpenModalStatus
+  );
   const itemsPerPage = 3;
+  const [currentTaskId, setCurrentTaskId] = useState(null);
 
   const indexOfLastItemOnPage = currentPage * itemsPerPage;
   const indexOfFirstItemOnPage = indexOfLastItemOnPage - itemsPerPage;
@@ -1003,6 +810,7 @@ export function ClosedTaskTable() {
     return () => {
       document.body.removeEventListener("keydown", handleKeyDown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle table row focus on up or down arrow keys
@@ -1034,6 +842,17 @@ export function ClosedTaskTable() {
       if (taskIndexModal === 0) return;
       setTaskIndexModal((i) => i - 1);
     }
+
+    if (e.key === "1") {
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("open");
+    } else if (e.key === "2") {
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("inProgress");
+    } else if (e.key === "3") {
+      setTaskStatusUpdateConfirmation(true);
+      setCurrentOpenModalStatus("closed");
+    }
   }
 
   // handle task modal toggle
@@ -1042,6 +861,9 @@ export function ClosedTaskTable() {
   }
 
   function handleModalOpen(taskIndex) {
+    const closedTasks = plannerData.filter((row) => row.status === "closed");
+    const selectedTask = closedTasks[taskIndex];
+    setCurrentTaskId(selectedTask.id);
     setIsModalOpen(true);
     setTaskIndexModal(taskIndex);
   }
@@ -1071,6 +893,28 @@ export function ClosedTaskTable() {
     setPlannerData(updatedPlannerData);
 
     setUserComment("");
+  }
+
+  function handleTaskStatusChange(value) {
+    setTaskStatusUpdateConfirmation(true);
+    setCurrentOpenModalStatus(value);
+  }
+
+  function handleConfirmedStatusChange() {
+    const updatedPlannerData = plannerData.map((task) => {
+      if (task.id === currentTaskId) {
+        return {
+          ...task,
+          status: currentOpenModalStatus,
+        };
+      }
+      return task;
+    });
+
+    setPlannerData(updatedPlannerData);
+    setConfirmedTaskStatusChange(currentOpenModalStatus);
+    setTaskStatusUpdateConfirmation(false);
+    setCurrentOpenModalStatus("closed");
   }
 
   return (
@@ -1188,7 +1032,11 @@ export function ClosedTaskTable() {
                     .find((row, i) => i === taskIndexModal)?.name
                 }
               </h3>
-              <Select defaultValue="closed">
+              <Select
+                defaultValue="closed"
+                value={currentOpenModalStatus}
+                onValueChange={(value) => handleTaskStatusChange(value)}
+              >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="" />
                 </SelectTrigger>
@@ -1198,6 +1046,23 @@ export function ClosedTaskTable() {
                   <SelectItem value="closed">Closed</SelectItem>
                 </SelectContent>
               </Select>
+              <ConfirmationModal isOpen={taskStatusUpdateConfirmation}>
+                <h4 className="text-md font-semibold mb-2">Are you sure?</h4>
+                <p className="text-sm mb-6">
+                  Are you sure you want to update the status of this task?
+                </p>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setTaskStatusUpdateConfirmation(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={() => handleConfirmedStatusChange()}>
+                    Continue
+                  </Button>
+                </div>
+              </ConfirmationModal>
             </div>
 
             <Badge className="mb-6 bg-neutral-100 border border-neutral-600 text-neutral-600">

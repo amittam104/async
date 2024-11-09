@@ -6,8 +6,12 @@ import {
   OpenTaskTable,
   ProgressTaskTable,
 } from "./PlannerTables";
+import { initialPlannerData } from "@/lib/data";
+import { useState } from "react";
 
 function Planner() {
+  const [plannerData, setPlannerData] = useState(initialPlannerData);
+
   return (
     <div>
       <div>
@@ -24,13 +28,22 @@ function Planner() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="account">
-            <OpenTaskTable />
+            <OpenTaskTable
+              plannerData={plannerData}
+              setPlannerData={setPlannerData}
+            />
           </TabsContent>
           <TabsContent value="password">
-            <ProgressTaskTable />
+            <ProgressTaskTable
+              plannerData={plannerData}
+              setPlannerData={setPlannerData}
+            />
           </TabsContent>
           <TabsContent value="closed">
-            <ClosedTaskTable />
+            <ClosedTaskTable
+              plannerData={plannerData}
+              setPlannerData={setPlannerData}
+            />
           </TabsContent>
         </Tabs>
       </div>
