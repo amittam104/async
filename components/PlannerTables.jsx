@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import Modal from "./Modal";
 import { ChevronLeft, ChevronRight, ListTodo } from "lucide-react";
+import { Badge } from "./ui/badge";
 
 const plannerData = [
   {
@@ -138,7 +139,7 @@ const plannerData = [
   },
   {
     id: 12,
-    priority: "Low",
+    priority: "High",
     status: "inProgress",
     name: "Update project dependencies",
     labels: "maintenance",
@@ -268,9 +269,7 @@ export function OpenTaskTable() {
   // Handle task modal traversing
   function handleModalTaskLeft() {
     if (taskIndexModal === 0) return;
-    setTaskIndexModal((i) => {
-      i - 1;
-    });
+    setTaskIndexModal((i) => i - 1);
   }
 
   function handleModalTaskRight() {
@@ -318,7 +317,9 @@ export function OpenTaskTable() {
               >
                 {/* <td className="text-left text-sm border-b py-2">{row.id}</td> */}
                 <td className="text-left text-sm border-b py-2">
-                  {row.priority}
+                  <Badge className="bg-neutral-100 border border-neutral-600 text-neutral-600">
+                    {row.priority}
+                  </Badge>
                 </td>
                 <td className="text-left text-sm border-b py-2">{row.name}</td>
                 <td className="text-left text-sm border-b py-2">
@@ -378,7 +379,7 @@ export function OpenTaskTable() {
           task
         </h2>
         <div className="px-4">
-          <h3 className="text-md font-medium mb-4 flex items-center">
+          <h3 className="text-md font-medium mb-2 flex items-center">
             <ListTodo className="w-5 mr-3" />
             {
               plannerData
@@ -386,6 +387,15 @@ export function OpenTaskTable() {
                 .find((row, i) => i === taskIndexModal)?.name
             }
           </h3>
+
+          <Badge className="mb-6 bg-neutral-100 border border-neutral-600 text-neutral-600">
+            Priority -{" "}
+            {
+              plannerData
+                .filter((row, i) => row.status === "open")
+                .find((row, i) => i === taskIndexModal)?.priority
+            }
+          </Badge>
 
           <p className="ml-2 mb-2 text-sm text-neutral-500">Details:</p>
           <div className="w-full border border-neutral-100 rounded-lg  py-4 px-4 text-sm text-neutral-700">
@@ -414,6 +424,8 @@ export function OpenTaskTable() {
 export function ProgressTaskTable() {
   const rowRef = useRef([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskIndexModal, setTaskIndexModal] = useState();
   const itemsPerPage = 3;
 
   const indexOfLastItemOnPage = currentPage * itemsPerPage;
@@ -458,6 +470,47 @@ export function ProgressTaskTable() {
     if (e.key === "ArrowUp" && i > 0) {
       rowRef.current[i - 1]?.focus();
     }
+
+    if (e.key === "Enter") {
+      setIsModalOpen(true);
+      setTaskIndexModal(i);
+    }
+
+    if (e.key === "Escape") {
+      setIsModalOpen(false);
+    }
+
+    // handle modal traversing with key down
+    if (e.key === "ArrowRight") {
+      if (inProgressPlannerData.length <= taskIndexModal + 1) return;
+      setTaskIndexModal((taskIndex) => taskIndex + 1);
+    }
+
+    if (e.key === "ArrowLeft") {
+      if (taskIndexModal === 0) return;
+      setTaskIndexModal((i) => i - 1);
+    }
+  }
+
+  // handle task modal toggle
+  function handleModalClose() {
+    setIsModalOpen(false);
+  }
+
+  function handleModalOpen(taskIndex) {
+    setIsModalOpen(true);
+    setTaskIndexModal(taskIndex);
+  }
+
+  // Handle task modal traversing
+  function handleModalTaskLeft() {
+    if (taskIndexModal === 0) return;
+    setTaskIndexModal((i) => i - 1);
+  }
+
+  function handleModalTaskRight() {
+    if (inProgressPlannerData.length <= taskIndexModal + 1) return;
+    setTaskIndexModal((taskIndex) => taskIndex + 1);
   }
 
   return (
@@ -495,12 +548,15 @@ export function ProgressTaskTable() {
                   key={row.id}
                   ref={(el) => (rowRef.current[i] = el)}
                   onKeyDown={(e) => handleKeyDown(e, i)}
+                  onClick={() => handleModalOpen(i)}
                   tabIndex="0"
                   className="focus:outline-none focus:bg-gray-100 text-center border-b py-2"
                 >
                   {/* <td className="text-left text-sm border-b py-2">{row.id}</td> */}
                   <td className="text-left text-sm border-b py-2">
-                    {row.priority}
+                    <Badge className="bg-neutral-100 border border-neutral-600 text-neutral-600">
+                      {row.priority}
+                    </Badge>
                   </td>
                   <td className="text-left text-sm border-b py-2">
                     {row.name}
@@ -550,6 +606,56 @@ export function ProgressTaskTable() {
           Next
         </Button>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
+        <h2 className="ml-4 text-xl font-semibold mb-8">
+          Your{" "}
+          {
+            plannerData
+              .filter((row, i) => row.status === "inProgress")
+              .find((row, i) => i === taskIndexModal)?.status
+          }{" "}
+          task
+        </h2>
+        <div className="px-4">
+          <h3 className="text-md font-medium mb-2 flex items-center">
+            <ListTodo className="w-5 mr-3" />
+            {
+              plannerData
+                .filter((row, i) => row.status === "inProgress")
+                .find((row, i) => i === taskIndexModal)?.name
+            }
+          </h3>
+
+          <Badge className="mb-6 bg-neutral-100 border border-neutral-600 text-neutral-600">
+            Priority -{" "}
+            {
+              plannerData
+                .filter((row, i) => row.status === "inProgress")
+                .find((row, i) => i === taskIndexModal)?.priority
+            }
+          </Badge>
+
+          <p className="ml-2 mb-2 text-sm text-neutral-500">Details:</p>
+          <div className="w-full border border-neutral-100 rounded-lg  py-4 px-4 text-sm text-neutral-700">
+            {
+              plannerData
+                .filter((row, i) => row.status === "inProgress")
+                .find((row, i) => i === taskIndexModal)?.details
+            }
+          </div>
+          <div>
+            <ChevronLeft
+              className="absolute top-[50%] left-2 "
+              onClick={(i) => handleModalTaskLeft(i)}
+            />
+            <ChevronRight
+              className="absolute top-[50%] right-2 "
+              onClick={(i) => handleModalTaskRight(i)}
+            />
+          </div>
+        </div>
+      </Modal>
     </>
   );
 }
@@ -557,6 +663,8 @@ export function ProgressTaskTable() {
 export function ClosedTaskTable() {
   const rowRef = useRef([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskIndexModal, setTaskIndexModal] = useState();
   const itemsPerPage = 3;
 
   const indexOfLastItemOnPage = currentPage * itemsPerPage;
@@ -601,6 +709,47 @@ export function ClosedTaskTable() {
     if (e.key === "ArrowUp" && i > 0) {
       rowRef.current[i - 1]?.focus();
     }
+
+    if (e.key === "Enter") {
+      setIsModalOpen(true);
+      setTaskIndexModal(i);
+    }
+
+    if (e.key === "Escape") {
+      setIsModalOpen(false);
+    }
+
+    // handle modal traversing with key down
+    if (e.key === "ArrowRight") {
+      if (closedPlannerData.length <= taskIndexModal + 1) return;
+      setTaskIndexModal((taskIndex) => taskIndex + 1);
+    }
+
+    if (e.key === "ArrowLeft") {
+      if (taskIndexModal === 0) return;
+      setTaskIndexModal((i) => i - 1);
+    }
+  }
+
+  // handle task modal toggle
+  function handleModalClose() {
+    setIsModalOpen(false);
+  }
+
+  function handleModalOpen(taskIndex) {
+    setIsModalOpen(true);
+    setTaskIndexModal(taskIndex);
+  }
+
+  // Handle task modal traversing
+  function handleModalTaskLeft() {
+    if (taskIndexModal === 0) return;
+    setTaskIndexModal((i) => i - 1);
+  }
+
+  function handleModalTaskRight() {
+    if (closedPlannerData.length <= taskIndexModal + 1) return;
+    setTaskIndexModal((taskIndex) => taskIndex + 1);
   }
 
   return (
@@ -638,12 +787,15 @@ export function ClosedTaskTable() {
                   key={row.id}
                   ref={(el) => (rowRef.current[i] = el)}
                   onKeyDown={(e) => handleKeyDown(e, i)}
+                  onClick={() => handleModalOpen(i)}
                   tabIndex="0"
                   className="focus:outline-none focus:bg-gray-100 text-center border-b py-2"
                 >
                   {/* <td className="text-left text-sm border-b py-2">{row.id}</td> */}
                   <td className="text-left text-sm border-b py-2">
-                    {row.priority}
+                    <Badge className="bg-neutral-100 border border-neutral-600 text-neutral-600">
+                      {row.priority}
+                    </Badge>
                   </td>
                   <td className="text-left text-sm border-b py-2">
                     {row.name}
@@ -693,6 +845,56 @@ export function ClosedTaskTable() {
           Next
         </Button>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
+        <h2 className="ml-4 text-xl font-semibold mb-8">
+          Your{" "}
+          {
+            plannerData
+              .filter((row, i) => row.status === "closed")
+              .find((row, i) => i === taskIndexModal)?.status
+          }{" "}
+          task
+        </h2>
+        <div className="px-4">
+          <h3 className="text-md font-medium mb-2 flex items-center">
+            <ListTodo className="w-5 mr-3" />
+            {
+              plannerData
+                .filter((row, i) => row.status === "closed")
+                .find((row, i) => i === taskIndexModal)?.name
+            }
+          </h3>
+
+          <Badge className="mb-6 bg-neutral-100 border border-neutral-600 text-neutral-600">
+            Priority -{" "}
+            {
+              plannerData
+                .filter((row, i) => row.status === "closed")
+                .find((row, i) => i === taskIndexModal)?.priority
+            }
+          </Badge>
+
+          <p className="ml-2 mb-2 text-sm text-neutral-500">Details:</p>
+          <div className="w-full border border-neutral-100 rounded-lg  py-4 px-4 text-sm text-neutral-700">
+            {
+              plannerData
+                .filter((row, i) => row.status === "closed")
+                .find((row, i) => i === taskIndexModal)?.details
+            }
+          </div>
+          <div>
+            <ChevronLeft
+              className="absolute top-[50%] left-2 "
+              onClick={(i) => handleModalTaskLeft(i)}
+            />
+            <ChevronRight
+              className="absolute top-[50%] right-2 "
+              onClick={(i) => handleModalTaskRight(i)}
+            />
+          </div>
+        </div>
+      </Modal>
     </>
   );
 }
