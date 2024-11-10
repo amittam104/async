@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Async
 
-## Getting Started
+Async is a modern task management tool designed to streamline project workflows without the need for constant meetings. It offers an intuitive interface for managing tasks across different stages with keyboard-first navigation and real-time status updates.
 
-First, run the development server:
+## Screenshots
+
+![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+
+## Features
+
+- Keyboard-first navigation for efficient task management
+- Three-stage task workflow (Open, In Progress, Closed)
+- Focus mode for detailed task viewing and editing
+- Real-time task status updates with confirmation dialogs
+- Comment system for team collaboration
+- Priority-based task organization
+- Pagination for handling large task lists
+- Responsive design with clean UI
+- Current tasks count badge for each status
+
+## Run Locally
+
+Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://github.com/amittam104/async
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+  cd async
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Install dependencies
 
-## Learn More
+```bash
+  npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+Start the development server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+  npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-## Deploy on Vercel
+## Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Next JS
+- React
+- TailwindCSS
+- Shadcn
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Design and Architecture
+
+### User Interface Design
+
+- Minimalist design approach focusing on content and functionality
+- Three-tab interface (Open, In Progress, Closed) for clear task organization
+- Modal-based focus mode for detailed task viewing and editing
+- Keyboard shortcuts for efficient navigation and task management
+- Status badges and priority indicators for quick visual feedback
+
+### Technical Architecture
+
+- Built with Next.js for optimal performance and SEO
+- Component-based architecture using React for maintainability
+- Shadcn UI components for consistent design language
+- TailwindCSS for responsive and maintainable styling
+- Keyboard event handlers for accessibility
