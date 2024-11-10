@@ -21,7 +21,11 @@ import { Badge } from "./ui/badge";
 import { Input } from "./ui/input";
 import ConfirmationModal from "./ConfirmationModal";
 
-export function OpenTaskTable({ plannerData, setPlannerData }) {
+export function OpenTaskTable({
+  plannerData,
+  setPlannerData,
+  setOpenTasksCount,
+}) {
   const rowRef = useRef([]);
   const modalStatusRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,6 +42,8 @@ export function OpenTaskTable({ plannerData, setPlannerData }) {
   const indexOfFirstItemOnPage = indexOfLastItemOnPage - itemsPerPage;
 
   const openPlannerData = plannerData.filter((row) => row.status === "open");
+
+  setOpenTasksCount(openPlannerData.length);
 
   const currentData = openPlannerData.slice(
     indexOfFirstItemOnPage,
@@ -418,7 +424,11 @@ export function OpenTaskTable({ plannerData, setPlannerData }) {
   );
 }
 
-export function ProgressTaskTable({ plannerData, setPlannerData }) {
+export function ProgressTaskTable({
+  plannerData,
+  setPlannerData,
+  setInProgressTasksCount,
+}) {
   const rowRef = useRef([]);
   const modalStatusRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -438,6 +448,8 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
   const inProgressPlannerData = plannerData.filter(
     (row) => row.status === "inProgress"
   );
+
+  setInProgressTasksCount(inProgressPlannerData.length);
 
   const currentData = inProgressPlannerData.slice(
     indexOfFirstItemOnPage,
@@ -822,7 +834,11 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
   );
 }
 
-export function ClosedTaskTable({ plannerData, setPlannerData }) {
+export function ClosedTaskTable({
+  plannerData,
+  setPlannerData,
+  setClosedTasksCount,
+}) {
   const rowRef = useRef([]);
   const modalStatusRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -842,6 +858,8 @@ export function ClosedTaskTable({ plannerData, setPlannerData }) {
   const closedPlannerData = plannerData.filter(
     (row) => row.status === "closed"
   );
+
+  setClosedTasksCount(closedPlannerData.length);
 
   const currentData = closedPlannerData.slice(
     indexOfFirstItemOnPage,
