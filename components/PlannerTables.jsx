@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "./ui/button";
 import Modal from "./Modal";
 import {
@@ -23,6 +23,7 @@ import ConfirmationModal from "./ConfirmationModal";
 
 export function OpenTaskTable({ plannerData, setPlannerData }) {
   const rowRef = useRef([]);
+  const modalStatusRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskIndexModal, setTaskIndexModal] = useState();
@@ -83,7 +84,6 @@ export function OpenTaskTable({ plannerData, setPlannerData }) {
     if (e.key === "Escape") {
       setIsModalOpen(false);
     }
-
     // handle modal traversing with key down
     if (e.key === "ArrowRight") {
       if (openPlannerData.length <= taskIndexModal + 1) return;
@@ -94,18 +94,35 @@ export function OpenTaskTable({ plannerData, setPlannerData }) {
       if (taskIndexModal === 0) return;
       setTaskIndexModal((i) => i - 1);
     }
-
-    if (e.key === "1") {
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("open");
-    } else if (e.key === "2") {
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("inProgress");
-    } else if (e.key === "3") {
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("closed");
-    }
   }
+
+  useEffect(() => {
+    function handleChangeTaskStatusKeyDown(e) {
+      if (e.key === "1" || e.key === "2" || e.key === "3") {
+        modalStatusRef.current?.focus();
+      }
+
+      if (e.key === "1") {
+        setTaskStatusUpdateConfirmation(true);
+        setCurrentOpenModalStatus("open");
+      } else if (e.key === "2") {
+        setTaskStatusUpdateConfirmation(true);
+        setCurrentOpenModalStatus("inProgress");
+      } else if (e.key === "3") {
+        setTaskStatusUpdateConfirmation(true);
+        setCurrentOpenModalStatus("closed");
+      }
+    }
+
+    document.body.addEventListener("keydown", handleChangeTaskStatusKeyDown);
+
+    return () => {
+      document.body.removeEventListener(
+        "keydown",
+        handleChangeTaskStatusKeyDown
+      );
+    };
+  }, []);
 
   // handle task modal toggle
   function handleModalClose() {
@@ -294,6 +311,7 @@ export function OpenTaskTable({ plannerData, setPlannerData }) {
               </h3>
               <Select
                 defaultValue="open"
+                ref={modalStatusRef}
                 value={currentOpenModalStatus}
                 onValueChange={(value) => handleTaskStatusChange(value)}
               >
@@ -314,7 +332,10 @@ export function OpenTaskTable({ plannerData, setPlannerData }) {
                 <div className="flex items-center gap-2">
                   <Button
                     variant="outline"
-                    onClick={() => setTaskStatusUpdateConfirmation(false)}
+                    onClick={() => {
+                      handleTaskStatusChange("open");
+                      setTaskStatusUpdateConfirmation(false);
+                    }}
                   >
                     Cancel
                   </Button>
@@ -399,6 +420,7 @@ export function OpenTaskTable({ plannerData, setPlannerData }) {
 
 export function ProgressTaskTable({ plannerData, setPlannerData }) {
   const rowRef = useRef([]);
+  const modalStatusRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskIndexModal, setTaskIndexModal] = useState();
@@ -447,11 +469,11 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
   // Handle table row focus on up or down arrow keys
   function handleKeyDown(e, i) {
     if (e.key === "ArrowDown" && i < rowRef.current.length - 1) {
-      rowRef.current[i + 1]?.focus();
+      rowRef?.current[i + 1]?.focus();
     }
 
     if (e.key === "ArrowUp" && i > 0) {
-      rowRef.current[i - 1]?.focus();
+      rowRef?.current[i - 1]?.focus();
     }
 
     if (e.key === "Enter") {
@@ -462,10 +484,9 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
     if (e.key === "Escape") {
       setIsModalOpen(false);
     }
-
     // handle modal traversing with key down
     if (e.key === "ArrowRight") {
-      if (inProgressPlannerData.length <= taskIndexModal + 1) return;
+      if (openPlannerData.length <= taskIndexModal + 1) return;
       setTaskIndexModal((taskIndex) => taskIndex + 1);
     }
 
@@ -473,18 +494,35 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
       if (taskIndexModal === 0) return;
       setTaskIndexModal((i) => i - 1);
     }
-
-    if (e.key === "1") {
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("open");
-    } else if (e.key === "2") {
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("inProgress");
-    } else if (e.key === "3") {
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("closed");
-    }
   }
+
+  useEffect(() => {
+    function handleChangeTaskStatusKeyDown(e) {
+      if (e.key === "1" || e.key === "2" || e.key === "3") {
+        modalStatusRef.current?.focus();
+      }
+
+      if (e.key === "1") {
+        setTaskStatusUpdateConfirmation(true);
+        setCurrentOpenModalStatus("open");
+      } else if (e.key === "2") {
+        setTaskStatusUpdateConfirmation(true);
+        setCurrentOpenModalStatus("inProgress");
+      } else if (e.key === "3") {
+        setTaskStatusUpdateConfirmation(true);
+        setCurrentOpenModalStatus("closed");
+      }
+    }
+
+    document.body.addEventListener("keydown", handleChangeTaskStatusKeyDown);
+
+    return () => {
+      document.body.removeEventListener(
+        "keydown",
+        handleChangeTaskStatusKeyDown
+      );
+    };
+  }, []);
 
   // handle task modal toggle
   function handleModalClose() {
@@ -676,6 +714,7 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
               </h3>
               <Select
                 defaultValue="inProgress"
+                ref={modalStatusRef}
                 value={currentOpenModalStatus}
                 onValueChange={(value) => handleTaskStatusChange(value)}
               >
@@ -696,7 +735,10 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
                 <div className="flex items-center gap-2">
                   <Button
                     variant="outline"
-                    onClick={() => setTaskStatusUpdateConfirmation(false)}
+                    onClick={() => {
+                      handleTaskStatusChange("inProgress");
+                      setTaskStatusUpdateConfirmation(false);
+                    }}
                   >
                     Cancel
                   </Button>
@@ -782,6 +824,7 @@ export function ProgressTaskTable({ plannerData, setPlannerData }) {
 
 export function ClosedTaskTable({ plannerData, setPlannerData }) {
   const rowRef = useRef([]);
+  const modalStatusRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskIndexModal, setTaskIndexModal] = useState();
@@ -830,11 +873,11 @@ export function ClosedTaskTable({ plannerData, setPlannerData }) {
   // Handle table row focus on up or down arrow keys
   function handleKeyDown(e, i) {
     if (e.key === "ArrowDown" && i < rowRef.current.length - 1) {
-      rowRef.current[i + 1]?.focus();
+      rowRef?.current[i + 1]?.focus();
     }
 
     if (e.key === "ArrowUp" && i > 0) {
-      rowRef.current[i - 1]?.focus();
+      rowRef?.current[i - 1]?.focus();
     }
 
     if (e.key === "Enter") {
@@ -845,10 +888,9 @@ export function ClosedTaskTable({ plannerData, setPlannerData }) {
     if (e.key === "Escape") {
       setIsModalOpen(false);
     }
-
     // handle modal traversing with key down
     if (e.key === "ArrowRight") {
-      if (closedPlannerData.length <= taskIndexModal + 1) return;
+      if (openPlannerData.length <= taskIndexModal + 1) return;
       setTaskIndexModal((taskIndex) => taskIndex + 1);
     }
 
@@ -856,18 +898,35 @@ export function ClosedTaskTable({ plannerData, setPlannerData }) {
       if (taskIndexModal === 0) return;
       setTaskIndexModal((i) => i - 1);
     }
-
-    if (e.key === "1") {
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("open");
-    } else if (e.key === "2") {
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("inProgress");
-    } else if (e.key === "3") {
-      setTaskStatusUpdateConfirmation(true);
-      setCurrentOpenModalStatus("closed");
-    }
   }
+
+  useEffect(() => {
+    function handleChangeTaskStatusKeyDown(e) {
+      if (e.key === "1" || e.key === "2" || e.key === "3") {
+        modalStatusRef.current?.focus();
+      }
+
+      if (e.key === "1") {
+        setTaskStatusUpdateConfirmation(true);
+        setCurrentOpenModalStatus("open");
+      } else if (e.key === "2") {
+        setTaskStatusUpdateConfirmation(true);
+        setCurrentOpenModalStatus("inProgress");
+      } else if (e.key === "3") {
+        setTaskStatusUpdateConfirmation(true);
+        setCurrentOpenModalStatus("closed");
+      }
+    }
+
+    document.body.addEventListener("keydown", handleChangeTaskStatusKeyDown);
+
+    return () => {
+      document.body.removeEventListener(
+        "keydown",
+        handleChangeTaskStatusKeyDown
+      );
+    };
+  }, []);
 
   // handle task modal toggle
   function handleModalClose() {
@@ -1057,6 +1116,7 @@ export function ClosedTaskTable({ plannerData, setPlannerData }) {
               </h3>
               <Select
                 defaultValue="closed"
+                ref={modalStatusRef}
                 value={currentOpenModalStatus}
                 onValueChange={(value) => handleTaskStatusChange(value)}
               >
@@ -1077,7 +1137,10 @@ export function ClosedTaskTable({ plannerData, setPlannerData }) {
                 <div className="flex items-center gap-2">
                   <Button
                     variant="outline"
-                    onClick={() => setTaskStatusUpdateConfirmation(false)}
+                    onClick={() => {
+                      handleTaskStatusChange("closed");
+                      setTaskStatusUpdateConfirmation(false);
+                    }}
                   >
                     Cancel
                   </Button>
