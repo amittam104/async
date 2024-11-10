@@ -4,7 +4,7 @@ Async is a modern task management tool designed to streamline project workflows 
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](/screenshot.png)
 
 ## Features
 
