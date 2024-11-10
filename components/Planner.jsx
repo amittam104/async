@@ -1,14 +1,11 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  ClosedTaskTable,
-  OpenTaskTable,
-  ProgressTaskTable,
-} from "./PlannerTables";
 import { initialPlannerData } from "@/lib/data";
 import { useState } from "react";
-import { Badge } from "./ui/badge";
+import { OpenTaskTable } from "./OpenTaskTable";
+import { ProgressTaskTable } from "./ProgressTaskTable";
+import { ClosedTaskTable } from "./ClosedTaskTable";
 
 function Planner() {
   const [plannerData, setPlannerData] = useState(initialPlannerData);
